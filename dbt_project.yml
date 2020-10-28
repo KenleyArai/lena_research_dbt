@@ -4,6 +4,11 @@ config-version: 2
 
 profile: "lena_research"
 
+quoting:
+  database: true
+  schema: true
+  identifier: true
+
 source-paths: ["models"]
 analysis-paths: ["analysis"]
 test-paths: ["tests"]
@@ -18,9 +23,6 @@ clean-targets: # directories to be removed by `dbt clean`
 
 seeds:
   +quote_columns: true
-
-  eda_sources:
-    +schema: "eda_raw"
 
 models:
   dbt_lena:
