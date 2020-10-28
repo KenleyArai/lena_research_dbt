@@ -23,10 +23,14 @@ clean-targets: # directories to be removed by `dbt clean`
 
 seeds:
   +quote_columns: true
+  +schema: "seed"
 
 models:
   dbt_lena:
-    eda_sources:
+    eda:
+      +tags: ["eda"]
+      +materialized: "table"
+    stg_eda:
       +tags: ["staging"]
       +materialized: "ephemeral"
       +schema: "staging"
