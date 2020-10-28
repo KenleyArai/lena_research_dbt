@@ -30,5 +30,5 @@ models:
   dbt_lena:
     eda_sources:
       +tags: ["staging"]
-      +materialized: "table"
+      +materialized: "ephemeral"
       +schema: "staging"

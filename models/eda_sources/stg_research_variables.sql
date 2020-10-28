@@ -1,7 +1,7 @@
 SELECT
-    pkey                            AS eda_subject_id,
-    id_1                            AS eda_subject_opponent_id_0,
-    id_2                            AS eda_subject_opponent_id_1,
+    {{ lower('pkey') }}                            AS eda_subject_id,
+    {{ lower('id_1') }}                            AS eda_subject_opponent_id_0,
+    {{ lower('id_2') }}                            AS eda_subject_opponent_id_1,
     series_type,
     session_number,
     ordering,
