@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: research
+    schema: public
+    tables:
+      - name: variables
+      - name: ppt_pairs
+      - name: time_series
+      - name: dynamic_time_warped
