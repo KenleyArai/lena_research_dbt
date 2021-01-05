@@ -2,6 +2,7 @@ SELECT
     source_relation,
     eda_subject_id,
     series_type,
+    channel,
     epoch,
     timestamp,
     value,

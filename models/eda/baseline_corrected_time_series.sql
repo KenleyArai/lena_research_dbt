@@ -2,7 +2,7 @@ WITH quiet_period_avg AS
 (
     SELECT
         eda_subject_id,
-        series_type,
+        channel,
         AVG(mean) AS channel_avg
     FROM
         {{ ref('raw_time_series') }}
@@ -16,19 +16,19 @@ add_base_line_correction AS
         rts.eda_subject_id,
         rts.epoch,
         rts.series_type,
-        (rts.mean - qpa.channel_avg)/rts.mean AS baseline_correction
+        (rts.mean - qpa.channel_avg)::FLOAT/rts.mean::FLOAT AS baseline_correction
     FROM
         {{ ref('raw_time_series') }} AS rts
             JOIN quiet_period_avg AS qpa ON
                 rts.eda_subject_id = qpa.eda_subject_id AND
-                rts.series_type = qpa.series_type
+                rts.channel = qpa.channel
     WHERE
         rts.is_quiet_period IS FALSE
 ),
 add_base_line_percent_change AS
 (
     SELECT
-        eda_subject_id
+        eda_subject_id,
         epoch,
         series_type,
         baseline_correction,
@@ -39,4 +39,4 @@ add_base_line_percent_change AS
 SELECT
     *
 FROM
-    quiet_period_avg
+    add_base_line_percent_change
