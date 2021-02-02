@@ -16,7 +16,7 @@ add_base_line_correction AS
         rts.eda_subject_id,
         rts.epoch,
         rts.series_type,
-        (rts.value - qpa.quiet_period_channel_avg)::FLOAT AS diff_between_value_and_qp_avg
+        (rts.mean - qpa.quiet_period_channel_avg)::FLOAT/rts.mean AS perc_diff_from_qp
     FROM
         {{ ref('raw_time_series') }} AS rts
             JOIN quiet_period_avg AS qpa ON
@@ -31,8 +31,8 @@ add_prev_baseline_correction AS
         eda_subject_id,
         epoch,
         series_type,
-        diff_between_value_and_qp_avg,
-        LAG(diff_between_value_and_qp_avg) OVER (PARTITION BY eda_subject_id, series_type ORDER BY epoch) AS prev_diff
+        perc_diff_from_qp,
+        LAG(perc_diff_from_qp) OVER (PARTITION BY eda_subject_id, series_type ORDER BY epoch) AS prev_diff
     FROM add_base_line_correction
 ),
 add_percent_change AS
@@ -41,9 +41,8 @@ add_percent_change AS
         eda_subject_id,
         epoch,
         series_type,
-        diff_between_value_and_qp_avg,
-        prev_diff,
-        (prev_diff - diff_between_value_and_qp_avg)/prev_diff AS percent_change_from_baseline
+        perc_diff_from_qp,
+        prev_diff
     FROM
         add_prev_baseline_correction
 )
