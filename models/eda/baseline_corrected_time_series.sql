@@ -42,7 +42,8 @@ add_percent_change AS
         epoch,
         series_type,
         perc_diff_from_qp,
-        prev_diff
+        prev_diff,
+        perc_diff_from_qp as baseline_correction
     FROM
         add_prev_baseline_correction
 )

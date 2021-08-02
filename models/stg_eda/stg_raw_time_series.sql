@@ -1,12 +1,3 @@
-{% set relations = dbt_utils.get_relations_by_pattern('dbt_seed', 'P%EDA') %}
-
-WITH all_raw_data AS
-(
-    {{
-        dbt_utils.union_relations(relations)
-    }}
-)
-
 SELECT
     {# Placeholder code for clearing primary keys
         {{
@@ -46,4 +37,4 @@ SELECT
         ELSE FALSE
     END                                                                               AS is_quiet_period
 FROM
-    all_raw_data
+    {{ ref('stg_raw_union') }}
