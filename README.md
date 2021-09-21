@@ -1,15 +1,26 @@
-Welcome to your new dbt project!
+# Lena Research
 
-### Using the starter project
+## Downloading & Installing
 
-Try running the following commands:
-- dbt run
-- dbt test
+**First make sure you have installed [DBT through homebrew](https://docs.getdbt.com/dbt-cli/installation#homebrew)**
 
-
-### Resources:
-- Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
-- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
-- Join the [chat](http://slack.getdbt.com/) on Slack for live discussions and support
-- Find [dbt events](https://events.getdbt.com) near you
-- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+1. Open commandline
+2. `cd` into the directory you want to download the repository to
+3. run `git clone git@github.com:KenleyArai/lena_research_dbt.git`
+4. Add the database credentials to your `~/.dbt/profiles.yml`
+5. Put csv data into to the `eda_data/` directory:
+   *  ```shell
+      lena_research_dbt/eda_data/
+                        ├── PB_data.zip
+                        └── raw_excel
+                            ├── PB003_a1_int_f_p\ -\ EDA.csv
+                            ├── PB003_a1_int_s\ -\ EDA.csv
+                            ├── PB003_a1_qp_bl\ -\ EDA.csv
+                            ├── PB003_a2_int_f_p\ -\ EDA.csv
+                            ├── PB003_a2_int_s_p\ -\ EDA.csv
+                            ├── PB003_a2_qp_bl\ -\ EDA.csv
+                            ├── PB006_b1_int_f_p\ -\ EDA.csv
+                            ...
+        ```
+6. run `dbt seed` on the commandline
+7. run `dbt run` on the commandline
