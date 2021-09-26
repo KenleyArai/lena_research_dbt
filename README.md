@@ -24,3 +24,6 @@
         ```
 6. Run `dbt seed` on the commandline
 7. Run `dbt run` on the commandline
+
+# Definitions
+
