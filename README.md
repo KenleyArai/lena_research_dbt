@@ -27,3 +27,16 @@
 
 # Definitions
 
+S1 - session 1
+S2 - session 2 
+
+F_INT - first interaction
+S_INT - second interaction
+
+FM - first mover
+SM - second mover
+
+QP_BL - quiet period baseline
+
+
+
