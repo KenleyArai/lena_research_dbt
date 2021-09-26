@@ -22,5 +22,5 @@
                             ├── PB006_b1_int_f_p\ -\ EDA.csv
                             ...
         ```
-6. run `dbt seed` on the commandline
-7. run `dbt run` on the commandline
+6. Run `dbt seed` on the commandline
+7. Run `dbt run` on the commandline
