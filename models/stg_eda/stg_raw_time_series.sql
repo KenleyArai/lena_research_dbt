@@ -11,16 +11,16 @@ SELECT
         }}                                                                               AS raw_time_series_id,
     #}
     {{- lower(get_raw_subject_id_from_filename_source('_dbt_source_relation')) -}}    AS eda_subject_id,
-    {{- lower(get_raw_series_type_from_filename_relation('_dbt_source_relation')) -}} AS series_type,
+    {{- lower(get_raw_series_type_from_filename_relation('_dbt_source_relation')) -}} AS session,
     CASE
-        WHEN _dbt_source_relation ILIKE '%a1%'
-                THEN 'a1'
-        WHEN _dbt_source_relation ILIKE '%a2%'
-                THEN 'a2'
-        WHEN _dbt_source_relation ILIKE '%b1%'
-                THEN 'b1'
-        WHEN _dbt_source_relation ILIKE '%b2%'
-                THEN 'b2'
+        WHEN _dbt_source_relation ILIKE '%S1%'
+                THEN 's1'
+        WHEN _dbt_source_relation ILIKE '%S2%'
+                THEN 's2'
+        WHEN _dbt_source_relation ILIKE '%S1%'
+                THEN 's1'
+        WHEN _dbt_source_relation ILIKE '%S2%'
+                THEN 's2'
     END                                                                              AS channel,
     "Epoch"                                                                           AS epoch,
     "Time"                                                                            AS timestamp,

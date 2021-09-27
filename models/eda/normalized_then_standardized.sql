@@ -2,7 +2,7 @@ WITH min_bl AS
 (
     SELECT
         eda_subject_id,
-        series_type,
+        session,
         MIN(baseline_correction) AS min_bl_correction
     FROM
         {{ ref('baseline_corrected_time_series') }}
@@ -12,7 +12,7 @@ max_bl AS
 (
     SELECT
         eda_subject_id,
-        series_type,
+        session,
         MAX(baseline_correction) AS max_bl_correction
     FROM
         {{ ref('baseline_corrected_time_series') }}
@@ -23,23 +23,23 @@ normalized_bl AS
     SELECT
         blc.epoch,
         blc.eda_subject_id,
-        blc.series_type,
+        blc.session,
         blc.baseline_correction,
         (blc.baseline_correction - min_bl.min_bl_correction)/(max_bl.max_bl_correction - min_bl.min_bl_correction) AS normalized
     FROM
         {{ ref('baseline_corrected_time_series') }} AS blc
             JOIN min_bl ON
                 blc.eda_subject_id = min_bl.eda_subject_id AND
-                blc.series_type = min_bl.series_type
+                blc.session = min_bl.session
             JOIN max_bl ON
                 blc.eda_subject_id = max_bl.eda_subject_id AND
-                blc.series_type = max_bl.series_type
+                blc.session = max_bl.session
 ),
 normalized_bl_stats AS
 (
     SELECT
         eda_subject_id,
-        series_type,
+        session,
         AVG(normalized) AS avg_normalized_bl,
         STDDEV(normalized) AS stddev_normalized_bl
     FROM
@@ -54,4 +54,4 @@ FROM
     normalized_bl AS nbl
         JOIN normalized_bl_stats nbls ON
             nbl.eda_subject_id = nbls.eda_subject_id AND
-            nbl.series_type = nbls.series_type
+            nbl.session = nbls.session
