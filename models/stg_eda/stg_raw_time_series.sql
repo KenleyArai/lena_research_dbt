@@ -13,13 +13,13 @@ SELECT
     {{- lower(get_raw_subject_id_from_filename_source('_dbt_source_relation')) -}}    AS eda_subject_id,
     {{- lower(get_raw_series_type_from_filename_relation('_dbt_source_relation')) -}} AS series_type,
     CASE
-        WHEN _dbt_source_relation ILIKE '%S1%'
+        WHEN _dbt_source_relation ILIKE '%s1%'
                 THEN 's1'
-        WHEN _dbt_source_relation ILIKE '%S2%'
+        WHEN _dbt_source_relation ILIKE '%s2%'
                 THEN 's2'
-        WHEN _dbt_source_relation ILIKE '%S1%'
+        WHEN _dbt_source_relation ILIKE '%s1%'
                 THEN 's1'
-        WHEN _dbt_source_relation ILIKE '%S2%'
+        WHEN _dbt_source_relation ILIKE '%s2%'
                 THEN 's2'
     END                                                                              AS channel,
     "Epoch"                                                                           AS epoch,
