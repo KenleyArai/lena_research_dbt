@@ -38,5 +38,24 @@
 
 - QP_BL - quiet period baseline
 
+### Examples:
+
+
+- PB003_S1_F_INT_FM_EDA
+   - participant 3
+   - session 1
+   - first interation
+   - first mover
+- PB007_S2_SM_QP_BL_EDA
+   - participant 7
+   - session 1 
+   - second mover
+   - quiet period baseline
+- PB006_S2_S_INT_SM_EDA
+   - participant 6
+   - session 2
+   - second interaction
+   - second mover
+
 
 
