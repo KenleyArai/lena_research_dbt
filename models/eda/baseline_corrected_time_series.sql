@@ -1,54 +1,49 @@
-WITH quiet_period_avg AS
+with quiet_period_avg as
 (
-    SELECT
-        eda_subject_id,
-        channel,
-        AVG(value) AS quiet_period_channel_avg
-    FROM
+    select
+        experiment_id,
+        avg(value) as quiet_period_channel_avg
+    from
         {{ ref('raw_time_series') }}
-    WHERE
-        is_quiet_period IS TRUE
-    {{ dbt_utils.group_by(2) }}
+    where
+        is_quiet_period = 1
+    {{ dbt_utils.group_by(1) }}
 ),
-add_base_line_correction AS
+add_base_line_correction as
 (
-    SELECT
-        rts.eda_subject_id,
+    select
+        rts.experiment_id,
         rts.epoch,
-        rts.series_type,
-        (rts.mean - qpa.quiet_period_channel_avg)::FLOAT/rts.mean AS perc_diff_from_qp
-    FROM
-        {{ ref('raw_time_series') }} AS rts
-            JOIN quiet_period_avg AS qpa ON
-                rts.eda_subject_id = qpa.eda_subject_id AND
-                rts.channel = qpa.channel
-    WHERE
-        rts.is_quiet_period IS FALSE
+        (rts.mean - qpa.quiet_period_channel_avg)::float/rts.mean as perc_diff_from_qp
+    from
+        {{ ref('raw_time_series') }} as rts
+            join quiet_period_avg as qpa on
+                rts.experiment_id = qpa.experiment_id
+    where
+        rts.is_quiet_period = 0
 ),
-add_prev_baseline_correction AS
+add_prev_baseline_correction as
 (
-    SELECT
-        eda_subject_id,
+    select
+        experiment_id,
         epoch,
-        series_type,
         perc_diff_from_qp,
-        LAG(perc_diff_from_qp) OVER (PARTITION BY eda_subject_id, series_type ORDER BY epoch) AS prev_diff
-    FROM add_base_line_correction
+        lag(perc_diff_from_qp) over (partition by experiment_id order by epoch) as prev_diff
+    from add_base_line_correction
 ),
-add_percent_change AS
+add_percent_change as
 (
-    SELECT
-        eda_subject_id,
+    select
+        experiment_id,
         epoch,
-        series_type,
         perc_diff_from_qp,
         prev_diff,
         perc_diff_from_qp as baseline_correction
-    FROM
+    from
         add_prev_baseline_correction
 )
 
-SELECT
+select
     *
-FROM
+from
     add_percent_change

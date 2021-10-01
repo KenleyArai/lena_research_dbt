@@ -1,7 +1,7 @@
 {{config(materialized = "view")}}
 
 select
-    substring(_dbt_source_relation, 26, 3)::numeric as participant_number,
+    substring(_dbt_source_relation, 24, 5) as participant_number,
 
     case
         when _dbt_source_relation ilike '%S1%'

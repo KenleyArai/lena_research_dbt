@@ -4,7 +4,6 @@ select
     {{dbt_utils.surrogate_key([
         'participant_number',
         'session_number',
-        'interaction_number',
         'mover_number'
     ])}} as experiment_id,
     *

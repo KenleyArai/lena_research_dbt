@@ -1,50 +1,44 @@
 WITH min_bl AS
 (
     SELECT
-        eda_subject_id,
-        series_type,
+        experiment_id,
         MIN(baseline_correction) AS min_bl_correction
     FROM
         {{ ref('baseline_corrected_time_series') }}
-    {{ dbt_utils.group_by(2) }}
+    {{ dbt_utils.group_by(1) }}
 ),
 max_bl AS
 (
     SELECT
-        eda_subject_id,
-        series_type,
+        experiment_id,
         MAX(baseline_correction) AS max_bl_correction
     FROM
         {{ ref('baseline_corrected_time_series') }}
-    {{ dbt_utils.group_by(2) }}
+    {{ dbt_utils.group_by(1) }}
 ),
 normalized_bl AS
 (
     SELECT
         blc.epoch,
-        blc.eda_subject_id,
-        blc.series_type,
+        blc.experiment_id,
         blc.baseline_correction,
         (blc.baseline_correction - min_bl.min_bl_correction)/(max_bl.max_bl_correction - min_bl.min_bl_correction) AS normalized
     FROM
         {{ ref('baseline_corrected_time_series') }} AS blc
             JOIN min_bl ON
-                blc.eda_subject_id = min_bl.eda_subject_id AND
-                blc.series_type = min_bl.series_type
+                blc.experiment_id = min_bl.experiment_id
             JOIN max_bl ON
-                blc.eda_subject_id = max_bl.eda_subject_id AND
-                blc.series_type = max_bl.series_type
+                blc.experiment_id = max_bl.experiment_id
 ),
 normalized_bl_stats AS
 (
     SELECT
-        eda_subject_id,
-        series_type,
+        experiment_id,
         AVG(normalized) AS avg_normalized_bl,
         STDDEV(normalized) AS stddev_normalized_bl
     FROM
         normalized_bl
-    {{ dbt_utils.group_by(2) }}
+    {{ dbt_utils.group_by(1) }}
 )
 
 SELECT
@@ -53,5 +47,4 @@ SELECT
 FROM
     normalized_bl AS nbl
         JOIN normalized_bl_stats nbls ON
-            nbl.eda_subject_id = nbls.eda_subject_id AND
-            nbl.series_type = nbls.series_type
+            nbl.experiment_id = nbls.experiment_id 
