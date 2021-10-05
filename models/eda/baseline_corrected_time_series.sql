@@ -14,6 +14,11 @@ add_base_line_correction as
     select
         rts.experiment_id,
         rts.epoch,
+        rts.participant_number,
+        rts.session_number,
+        rts.mover_number,
+        rts.interaction_number,
+        rts.source_relation,
         (rts.mean - qpa.quiet_period_channel_avg)::float/rts.mean as perc_diff_from_qp
     from
         {{ ref('raw_time_series') }} as rts
@@ -27,6 +32,11 @@ add_prev_baseline_correction as
     select
         experiment_id,
         epoch,
+        participant_number,
+        session_number,
+        mover_number,
+        interaction_number,
+        source_relation,
         perc_diff_from_qp,
         lag(perc_diff_from_qp) over (partition by experiment_id order by epoch) as prev_diff
     from add_base_line_correction
@@ -36,6 +46,11 @@ add_percent_change as
     select
         experiment_id,
         epoch,
+        participant_number,
+        session_number,
+        mover_number,
+        interaction_number,
+        source_relation,
         perc_diff_from_qp,
         prev_diff,
         perc_diff_from_qp as baseline_correction

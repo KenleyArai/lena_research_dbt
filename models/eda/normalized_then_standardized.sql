@@ -19,9 +19,7 @@ max_bl AS
 normalized_bl AS
 (
     SELECT
-        blc.epoch,
-        blc.experiment_id,
-        blc.baseline_correction,
+        blc.*,
         (blc.baseline_correction - min_bl.min_bl_correction)/(max_bl.max_bl_correction - min_bl.min_bl_correction) AS normalized
     FROM
         {{ ref('baseline_corrected_time_series') }} AS blc
