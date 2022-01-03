@@ -30,6 +30,7 @@ models:
     eda:
       +tags: ["eda"]
       +materialized: "table"
+      +schema: "eda"
     stg_eda:
       +tags: ["staging"]
       +materialized: "ephemeral"
